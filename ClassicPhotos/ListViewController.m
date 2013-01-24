@@ -327,23 +327,19 @@
 
 
 - (void)loadImagesForOnscreenCells {
-    
-    // 1
+
     NSSet *visibleRows = [NSSet setWithArray:[self.tableView indexPathsForVisibleRows]];
-    
-    // 2
+   
     NSMutableSet *pendingOperations = [NSMutableSet setWithArray:[self.pendingOperations.downloadsInProgress allKeys]];
     [pendingOperations addObjectsFromArray:[self.pendingOperations.filtrationsInProgress allKeys]];
     
     NSMutableSet *toBeCancelled = [pendingOperations mutableCopy];
     NSMutableSet *toBeStarted = [visibleRows mutableCopy];
     
-    // 3
     [toBeStarted minusSet:pendingOperations];
-    // 4
+
     [toBeCancelled minusSet:visibleRows];
     
-    // 5
     for (NSIndexPath *anIndexPath in toBeCancelled) {
         
         ImageDownloader *pendingDownload = [self.pendingOperations.downloadsInProgress objectForKey:anIndexPath];
@@ -356,7 +352,6 @@
     }
     toBeCancelled = nil;
     
-    // 6
     for (NSIndexPath *anIndexPath in toBeStarted) {
         
         PhotoRecord *recordToProcess = [self.photos objectAtIndex:anIndexPath.row];
