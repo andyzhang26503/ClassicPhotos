@@ -59,11 +59,11 @@
         
         [datasource_download_operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation,id responseObject){
             NSData *datasource_data = (NSData *)responseObject;
-            CFPropertyListRef plist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, (__bridge CFDataRef)datasource_data, kCFPropertyListImmutable, NULL);            
-            NSDictionary *datasource_dictionary = (__bridge NSDictionary *)plist;
+            //CFPropertyListRef plist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, (__bridge CFDataRef)datasource_data, kCFPropertyListImmutable, NULL);
+            //NSDictionary *datasource_dictionary = (__bridge NSDictionary *)plist;
             
-            //TODO
-            //NSDictionary *datasource_dictionary = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil];
+            NSDictionary *datasource_dictionary = [NSPropertyListSerialization propertyListFromData:datasource_data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+            
             NSMutableArray *records = [NSMutableArray array];
             
             for (NSString *key in datasource_dictionary) {
@@ -75,7 +75,7 @@
             }
             
             self.photos = records;
-            CFRelease(plist);
+            //CFRelease(plist);
             
             [[self tableView] reloadData];
             [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
